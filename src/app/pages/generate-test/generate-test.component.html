@@ -1,0 +1,114 @@
+<div class="button-page">
+  <!-- <div class="row"> -->
+  <!-- bootstrap modal start -->
+
+
+  <div class="col-sm-12 model-btn-card">
+    <div class="row" *ngIf="upload">
+      <div class="col-sm-5">
+        <app-card *ngIf="uploadwsdlurl">
+          <div>
+            <form #f="ngForm" (ngSubmit)="onSubmitUpload(f)" novalidate>
+              <label for="wsdlurl"> Enter WSDL URL</label>
+              <br>
+              <br>
+              <input name="wsdlurl" placeholder="WSDl URL.." ngModel #wsdlurl="ngModel" autofocus="autofocus" class="form-control">
+              <a (click)="LoadFromUrl(f)">
+                <br>
+                <u>
+                  <b>Load File</b>
+                </u>
+              </a>
+              <br>
+              <button class="btn btn-primary" type="submit">
+                <i class="icofont icofont-check-circled"></i>Submit</button>
+            </form>
+          </div>
+        </app-card>
+      </div>
+
+      <div class="col-sm-6">
+        <app-card *ngIf="uploadwsdlfile">
+          <div>
+            <form #f="ngForm" (ngSubmit)="onSubmitUpload(f)" novalidate>
+              <label for="wsdlfile"> Upload File</label>
+              <br>
+              <br>
+              <input name="wsdlurl" type="file" ngModel #wsdlfile="ngModel" (change)="fileChange($event)" accept=".wsdl" style="width:500px" id="avatar" />
+              <br>
+            </form>
+            <br>
+            <br>
+            <button class="btn btn-primary" (click)="onSubmitUpload(f)">
+              <i class="icofont icofont-check-circled"></i>Submit</button>
+          </div>
+        </app-card>
+      </div>
+    </div>
+    <div class="row" *ngIf="jdbcCon">
+      <div id="content">
+        <label for="ptype"> JDBC Configuration name </label>
+        <select [(ngModel)]="newAttribute" name="newAttribute">
+                  <!-->  <select [(ngModel)]="newAttribute" name="newAttribute" (ngModelChange)="OnChangeCnx($event)"><-->
+                    <option value="" disabled selected>Select JDBC configuration name </option>
+                    <option *ngFor="let res of RessourcesJDBCArray" [ngValue]="res"> {{res}} </option>
+                  </select>
+        <button class="btn btn-primary" (click)="AddexistantJDBCRessource()"> Submit</button>
+      </div>
+    </div>
+
+
+    <div class="col-sm-14" *ngIf="testchoice">
+      <app-card [title]="pname">
+        <div class="row">
+          <div class="table-responsive col-sm-7">
+            <form #f="ngForm">
+              <table class="table table-striped table-bordered full-data-table">
+                <thead>
+                  <th>
+                    Operation Name
+                  </th>
+                  <th>
+                    Configure Input
+                  </th>
+                  <th>
+                    Configure Output
+                  </th>
+
+                </thead>
+                <tbody>
+                  <tr *ngFor="let Operation of WsdLOpsArray ; let i=index">
+                    <td>{{Operation.name}} </td>
+
+
+                    <td>
+                      <button class="btn btn-primary" (click)="CallXmlForRequest(Operation.name)">Configure Input</button>
+                    </td>
+                    <td>
+                      <button class="btn btn-primary" (click)="CallXmlForResponse(Operation.name )">Configure Output</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </form>
+          </div>
+        </div>
+      </app-card>
+    </div>
+
+    <div *ngIf="configInput">
+      <form #f="ngForm" (ngSubmit)="OnSubmitTestRequest(f, OpXmlItem.operationName )">
+        <textarea [(ngModel)]="OpXmlItem.opRequest" name="XmlNewContent" autofocus rows="10" cols="100">{{OpXmlItem.opRequest}}</textarea>
+        <br>
+        <button class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+
+    <div *ngIf="configOutput">
+      <form #f="ngForm" (ngSubmit)="OnSubmitTestResponse(f, OpXmlItem.operationName )">
+        <textarea [(ngModel)]="OpXmlItem.opResponse" name="XmlNewContent" autofocus rows="50" cols="60">{{OpXmlItem.opResponse}}</textarea>
+        <br>
+        <button class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+    <ng2-toasty [position]="position"></ng2-toasty>

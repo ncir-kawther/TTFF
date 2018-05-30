@@ -1,0 +1,37 @@
+<div class="col-sm-12 model-btn-card">
+  <div class="row" *ngIf="upload">
+    <div class="col-sm-8">
+      <app-card [title]="opname">
+        <table class="table table-striped table-bordered full-data-table">
+          <thead>
+            <th> Test Case Name </th>
+            <th> Action </th>
+          </thead>
+          <tbody>
+              <tr *ngFor="let Case of TestCasesArray; let i=index">
+                  <td>
+                    {{Case}}
+                  </td>
+                  <td>
+                    <button type="button" (click)="deleteFieldValue(i)" class="btn btn-danger ">
+                      <i class="icofont icofont-ui-delete"></i>
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <input type="text" autofocus="autofocus" [(ngModel)]="newAttribute" name="newAttribute" required ngControl="newAttributeCtrl"
+                      class="btn" />
+                  </td>
+                  <td>
+                    <button type="button" (click)="addFieldValue()" class="btn btn-primary">
+                      <i class="icofont icofont-plus-square"></i>
+                    </button>
+                  </td>
+                </tr>
+          </tbody>
+        </table>
+      </app-card>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,71 @@
+<div *ngIf="deleteSuccess" class="bit top right" data-position="top right">
+  <div class="btn btn-success waves-effect">
+    <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+    <strong>Success! {{pname}}</strong> deleted With Success .
+  </div>
+</div>
+<div class="card">
+  <div class="card" *ngIf="basic">
+    <div class="card-header">
+      Projects Upload List
+    </div>
+
+    <div class="card-body">
+
+      <div class="table-responsive">
+        <table id="customers" class="table table-hover">
+          <thead>
+            <tr>
+              <th>
+                Project Name
+              </th>
+              <th>
+                Project Client
+              </th>
+              <th>
+                Project owner
+              </th>
+              <th>
+                Project Creation Date
+              </th>
+              <th>
+                Action
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+
+
+            <tr *ngFor="let Project of ProjectsUploadArray; let i=index">
+              <td>
+                {{Project.project_upload_name}}
+
+              </td>
+              <td>
+                {{Project.project_upload_client_name}}
+
+              </td>
+              <td>
+                {{Project.project_upload_owner}}
+
+              </td>
+              <td>
+
+                {{Project.project_upload_crdate|date: 'medium' }}
+                <!--    <input [ngModel]="startDate | date:'yyyy-MM-dd'" (ngModelChange)="startDate = $event" type="date" name="startDate" /> -->
+
+
+              </td>
+              <td>
+                <button type="button" (click)="DeleteField(Project.project_upload_name,i)" class="btn btn-primary">Delete</button>
+              </td>
+            </tr>
+          </tbody>
+
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+<ng2-toasty [position]="position"></ng2-toasty>

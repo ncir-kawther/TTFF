@@ -1,0 +1,24 @@
+
+    <div class="col-sm-14">
+            <app-card [title]=pname>
+      
+      
+      
+      
+      
+                      <div class="row">
+                        <select class="form-control  col-xs-12 col-md-8 full-data-show-entry" name="oname" ngModel #oname="ngModel" multiple>
+                            <option value="" disabled selected>Select your Operation</option>
+                          <option name="op" value="{{Operation}}" *ngFor="let Operation of OperationsArray">  {{Operation}}</option>
+                        </select>
+      
+                      </div>  <br>
+      
+                      <div class="row">
+                          <button  type="button" class="btn btn-primary btn-round btn-block" (click)="GO(oname.value)"> <i class="icofont icofont-double-right"></i>Next</button>
+      
+                      </div>
+      
+              </app-card>
+            </div>
+            <ng2-toasty [position]="position"></ng2-toasty>

@@ -1,0 +1,231 @@
+<div class="button-page">
+  <!-- <div class="row"> -->
+  <!-- bootstrap modal start -->
+  <div class="col-sm-14">
+    <!-- Notification card start -->
+    <app-card [title]=pname>
+      <div class="row">
+
+        <div class="col-sm-6 model-btn-card">
+          <!--><button type="button" (click)="Download(ProjectName)" class="btn btn-primary btn-round btn-block">
+            <i class="icofont icofont-download-alt"></i>Download</button>
+          <-->
+            <button type="button" (click)="onOld(ProjectName)" class="btn btn-primary btn-block">
+            <i class="icofont icofont-plus-circle"></i>Add Operations</button>
+            <button type="button" (click)="AddRessources(pname)" class="btn btn-primary btn-block">
+            <i class="icofont icofont-hand-power"></i>Add Ressources</button>
+            <button type="button" (click)="AddJMS()" class="btn btn-primary btn-block">
+                <i class="icofont icofont-ui-message"></i>Add JMS</button>
+            <button type="button" (click)="UploadWSDL()" class="btn btn-primary btn-block">
+            <i class="icofont icofont-upload-alt"></i>WSDl Upload</button>
+
+        </div>
+        <div class="col-sm-6 model-btn-card">
+          <button type="button" (click)="GenerateTest()" class="btn btn-primary btn-block">
+            <i class="icofont icofont-check-circled"></i>Generate Test Project</button>
+          <button type="button" (click)="ExposeSoapOperation()" class="btn btn-primary btn-block">
+            <i class="icofont icofont-plus-circle"></i>Expose SOAP Operation</button>
+          <button type="button" (click)="GenerateDocumentataion(pname)" class="btn btn-primary btn-block">
+              <i class="icofont icofont-plus-circle"></i>Generate Documentation</button>
+        </div>
+
+      </div>
+    </app-card>
+    <!-- Notification card end -->
+  </div>
+  <!-- Bootstrap modal end -->
+  <!-- </div> -->
+
+  <div class="row" *ngIf="showUpload">
+    <div class="col-sm-5">
+      <app-card>
+        <div>
+          <form #f="ngForm" (ngSubmit)="onSubmitUpload(f)" novalidate>
+            <label for="wsdlurl"> Enter WSDL URL</label>
+            <br>
+            <br>
+            <input name="wsdlurl" placeholder="WSDl URL.." ngModel #wsdlurl="ngModel" autofocus="autofocus" class="form-control">
+            <a (click)="LoadFromUrl(f)">
+            <br>
+            <u>
+              <b>Load File</b>
+            </u>
+          </a>
+
+            <br>
+            <button class="btn btn-primary" type="submit">
+            <i class="icofont icofont-check-circled"></i>Submit</button>
+          </form>
+        </div>
+      </app-card>
+    </div>
+    <div class="col-sm-6">
+      <app-card>
+        <div>
+          <form #f="ngForm" (ngSubmit)="onSubmitUpload(f)" novalidate>
+            <label for="wsdlfile"> Upload File</label>
+            <br>
+            <br>
+            <input name="wsdlurl" type="file" ngModel #wsdlfile="ngModel" (change)="fileChangeWsdl($event)" placeholder="Upload file" accept=".wsdl" style="width:500px" id="avatar" />
+            <br>
+          </form>
+          <br>
+          <br>
+          <button class="btn btn-primary" (click)="onSubmitUpload(f)">
+          <i class="icofont icofont-check-circled"></i>Submit</button>
+        </div>
+      </app-card>
+    </div>
+  </div>
+
+  <app-card *ngIf="displayOperationsList">
+    <div class="table-responsive">
+      <form #f="ngForm" (ngSubmit)="onSubmitUpload(f)" novalidate>
+        <table class="table table-striped table-bordered full-data-table">
+          <thead>
+            <tr>
+
+              <th>Operation Name</th>
+              <th>
+                <input type="checkbox" (change)=CheckAll(f)/>
+              </th>
+            </tr>
+
+          </thead>
+          <tbody>
+            <tr *ngFor="let Opname of WsdLOpsArray; let i=index">
+              <td>
+                {{Opname}}
+              </td>
+              <td>
+                <input #check type="checkbox" (change)="OnChecked(Opname, check.checked)" />
+              </td>
+            </tr>
+
+          </tbody>
+          <button type="button" class="btn btn-primary" (click)="SelectOperations()">Submit Operations</button>
+
+        </table>
+      </form>
+    </div>
+  </app-card>
+
+  <app-card *ngIf="addLog">
+    <div class="table-responsive">
+      <form #f="ngForm" novalidate>
+        <table class="table table-striped table-bordered full-data-table">
+
+          <thead>
+
+            <th>Operation Name</th>
+            <th>Add Log</th>
+          </thead>
+          <tbody>
+            <tr *ngFor="let Opname of SelectedOperations; let i=index">
+              <td>
+                {{Opname}}
+              </td>
+              <td>
+                <input type="checkbox" #Loginfo value="Info" (change)="chooseLogInfo(Opname, Loginfo.checked)"> Log Info
+                <br>
+                <input type="checkbox" #Log value="Exception" (change)="chooseLogException(Opname, Log.checked)"> Log Exception
+                <br>
+
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+        <button type="button" (click)="SubmitOperationsToService()" class="btn btn-primary">Create Calls</button>
+        <button type="button" class="btn btn-primary" (click)="CreateXSD()" class="btn btn-primary">Create Operations XSD </button>
+      </form>
+    </div>
+  </app-card>
+
+  <div *ngIf="operation" id="content">
+    <app-card [title]="pname">
+      <!-->to
+      <strong>{{pname}}</strong>
+      <-->
+        <div class="table-responsive">
+          <form #formCtrl="ngForm">
+            <table id="customers">
+              <thead>
+                <tr>
+                  <th>
+                    Operation Name
+                  </th>
+                  <th></th>
+                  <th>
+                    Action
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let Operation of OperationsArray; let i=index">
+                  <td>
+                    {{Operation}}
+                  </td>
+                  <td> </td>
+                  <td>
+                    <button type="button" (click)="deleteFieldValue(i)">
+                    <i class="icofont icofont-ui-delete"></i>
+                  </button>
+                  </td>
+                </tr>
+                <tr></tr>
+                <tr>
+                  <td>
+                    <input type="text" autofocus [(ngModel)]="newAttribute" name="newAttribute" required ngControl="newAttributeCtrl" class="form-control" />
+                  </td>
+                  <td> </td>
+                  <td>
+                    <button type="button" (click)="addFieldValue()">
+                    <i class="icofont icofont-plus-square"></i>
+                  </button>
+
+                  </td>
+                </tr>
+
+              </tbody>
+
+            </table><br>
+            <button type="button" (click)="onSubmitOp()" [disabled]="formCtrl.form.valid" class="btn btn-primary ">Submit</button>
+          </form>
+        </div>
+    </app-card>
+
+
+
+
+
+  </div>
+
+  <div *ngIf="documentataionAdded" class="bit top right" data-position="top right">
+    <div class="btn btn-success waves-effect">
+      <span class="closebtn " onclick="this.parentElement.style.display='none' ; ">&times;</span>
+      <strong> Success! {{pname}} </strong> Documentation generated With Success .
+    </div>
+  </div>
+
+  <div *ngIf="addXSDSucc">
+    <div class="btn btn-success waves-effect">
+      <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+      <strong>Success!</strong> Operations XSD are added to
+      <strong>{{pname}} </strong> With Success.
+    </div>
+  </div>
+  <div *ngIf="addXSDfail">
+    <div class="btn btn-danger waves-effect">
+      <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+      <strong>Fail!</strong> Operations might already exist in
+      <strong>{{pname}} </strong> WSDL Please Check them .
+    </div>
+  </div>
+  <div *ngIf="downloadSuccess">
+    <div class="btn btn-success waves-effect">
+      <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+      <strong>Success! {{pname}} </strong> downloaded With Success.
+    </div>
+  </div>
+  <ng2-toasty [position]="position"></ng2-toasty>
